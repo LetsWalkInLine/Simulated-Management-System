@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>供应订单表</title>
+	<meta charset="utf-8">
+	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+	<link rel='stylesheet' href='/stylesheets/table_style.css' />
+  </head>
+  <body>
+    <div class="container">
+		<div class="main">
+			<div class="select">
+				<form action="/like/order" method="get">
+					<select name="selectVal">
+							<option value="pno">按零件号筛选</option>
+							<option value="wno">按仓库号筛选</option>
+							<option value="quantity">按供应量筛选</option>
+							<option value="state">按状态筛选</option>
+					</select>
+					<div class="search">
+						<input type="text" name="like">
+						<input type="text" name="sno" value="<%= sno %>" style="display: none;" />
+						<button class="searchBtn">
+							<img src="/images/search.png" width="25px" height="25px">
+						</button>
+					</div>
+				</form>
+				<button id="addBtn">+</button>
+			</div>
+			<div class="content">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>订单号</th>
+							<th>供应商号</th>
+							<th>零件号</th>
+							<th>仓库号</th>
+							<th>供应量(万个)</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% tablelist.forEach(function(item){ %>
+						<tr>
+							<td><%= item.oid %></td>
+							<td><%= item.sno %></td>
+							<td><%= item.pno %></td>
+							<td><%= item.wno %></td>
+							<td><%= item.quantity %></td>
+							<td><%= item.state %></td>
+							<td>
+								<img src="/images/modify.png" class="edit" width="25px" height="25px" data-id="<%= item.oid %>" data-pno="<%= item.pno %>" data-wno="<%= item.wno %>" data-quantity="<%= item.quantity %>" data-state="<%= item.state %>">
+								<img src="/images/delete.png" class="del" width="25px" height="25px" data-id="<%= item.oid %>" data-state="<%= item.state %>">
+							</td>
+						</tr>
+						<% }) %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="dialog isDialog"></div>
+	<div class="dialog-wrap isDialog">
+		<div class="dialog-header">
+			<h3>添加订单</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+		</div>
+		<form action="/addPart/order" method="post">
+			<div>
+				<p>零件号</p>
+				<p>
+					<div class="no-select">
+					<select name="pno">
+						<% pnolist.forEach(function(item){ %>
+							<option value="<%= item.pno %>"><%= item.pno %></option>
+						<% }) %>
+					</select>
+					</div>
+				</p>
+			</div>
+			<div>
+				<p>仓库号</p>
+				<p>
+					<div class="no-select">
+					<select name="wno">
+						<% wnolist.forEach(function(item){ %>
+							<option value="<%= item.wno %>"><%= item.wno %></option>
+						<% }) %>
+					</select>
+					</div>
+				</p>
+			</div>
+			<div>
+				<p>供应量(万个)</p>
+				<p>
+					<input type="text" class="form-control" name="quantity" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<input type="text" class="form-control" name="state" value="等待确认" style="display: none;" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<input type="text" class="form-control" name="sno" value="<%= sno %>" style="display: none;" />
+				</p>
+			</div>			
+			<div class="dialog-submit">
+				<button class="determine">确定</button>
+			</div>
+		</form>
+		<div class="dialog-order-add">
+			<button class="cancel">取消</button>	
+		</div>
+	</div>
+	
+	<div class="dialog isDelete"></div>
+	<div class="dialog-wrap isDelete">
+		<div class="dialog-header">
+			<h3>确定是否删除?</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+			<div class="dialog-footer">
+				<button class="determine determineDel">确定</button>
+				<button class="cancel">取消</button>
+			</div>			
+		</div>
+	</div>
+
+  <script src="/javascripts/jquery.js"></script>
+  <script>
+	$(function(){
+		var id = '';
+		var updateHtml = '';
+		var state = '';
+		//显示表单
+		$('#addBtn').click(function(){
+			$('.isDialog').show();
+		})
+		//隐藏表单
+		$('.close,.cancel').click(function(){
+			$('.isDialog').hide();
+		})
+		//点击删除
+		$('.del').click(function(){
+			id = $(this).data('id');
+			state = $(this).data('state');
+			$('.isDelete').show();
+		})
+		//隐藏删除
+		$('.close,.cancel').click(function(){
+			$('.isDelete').hide();
+		})
+		//点击确定删除
+		$('.determineDel').click(function(){
+			window.location.href = `/del/order?oid=${id}&sno=<%= sno %>&state=${state}`;
+		})
+		
+		//点击修改操作
+		$('.edit').click(function(){
+			var updateId = $(this).data('id');
+			var updatePno = $(this).data('pno');
+			var updateWno = $(this).data('wno');
+			var updateQuantity = $(this).data('quantity');
+			var updateState = $(this).data('state');
+			updateHtml = `
+			<div class="dialog isUpdate"></div>
+				<div class="dialog-wrap isUpdate">
+				<div class="dialog-header">
+					<h3>修改订单</h3>
+					<div class="close">
+						<img src="/images/close.png" style="width:25px;height:25px">
+					</div>
+				</div>
+				<form action="/updatePart/order" method="post">
+					<div>
+						<p>订单号: ${updateId}</p>
+						<p>
+							<input type="text" class="form-control" name="oid" value="${updateId}" style="display: none;" />
+						</p>
+					</div>
+					<div>
+						<p>原零件号: ${updatePno}</p>
+						<p>
+							<div class="no-select">
+							<select name="pno">
+								<% pnolist.forEach(function(item){ %>
+									<option value="<%= item.pno %>"><%= item.pno %></option>
+								<% }) %>
+							</select>
+							</div>
+						</p>
+					</div>
+					<div>
+						<p>原仓库号: ${updateWno}</p>
+						<p>
+							<div class="no-select">
+							<select name="wno">
+								<% wnolist.forEach(function(item){ %>
+									<option value="<%= item.wno %>"><%= item.wno %></option>
+								<% }) %>
+							</select>
+							</div>
+						</p>
+					</div>
+					<div>
+						<p>供应量(万个)</p>
+						<p>
+							<input type="text" class="form-control" name="quantity" value="${updateQuantity}" />
+						</p>
+					</div>
+					<div>
+						<p>状态: ${updateState}(如果已入库则无法修改订单)</p>
+						<p>
+							<input type="text" class="form-control" name="state" value="${updateState}" style="display: none;" />
+						</p>
+					</div>
+					<div>
+						<p>
+							<input type="text" class="form-control" name="sno" value="<%= sno %>" style="display: none;" />
+						</p>
+					</div>			
+					<div class="dialog-submit">
+						<button class="determine">确定</button>
+					</div>
+				</form>
+				<div class="dialog-order-update">
+					<button class="cancel">取消</button>	
+				</div>
+			</div>
+			`
+		 	$('body').append( updateHtml );
+		})
+		
+		//取消修改操作
+		$('body').on('click','.close,.cancel',function(){
+			$('.isUpdate').hide();
+		})
+	})
+  </script>
+  </body>
+</html>

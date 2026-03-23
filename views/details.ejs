@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>零件详情表</title>
+	<meta charset="utf-8">
+	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+	<link rel='stylesheet' href='/stylesheets/table_style.css' />
+  </head>
+  <body>
+    <div class="container">
+	<div class="dialog"></div>
+	<div class="dialog-wrap">
+		<div class="dialog-header">
+			<h3>零件详情</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+		</div>
+		<form action="" method="post">
+			<div>
+				<p>零件号: <%= infolist.pno %></p>
+			</div>
+			<div>
+				<p>零件名称: <%= infolist.pname %></p>
+			</div>
+			<div>
+				<p>单价: <%= infolist.unit_price %></p>
+			</div>
+			<div>
+				<p>规格: <%= infolist.size %></p>
+			</div>
+			<div>
+				<p>描述: <%= infolist.describes %></p>
+			</div>
+			<div>
+				<p>供应商号: <%= infolist.sno %></p>
+			</div>
+		</form>
+	</div>
+	</div>
+
+  <script src="/javascripts/jquery.js"></script>
+  <script>
+	$(function(){
+		var pno = '';
+		var sno = '';
+		var updateHtml = '';
+		//显示表单
+		$('#addBtn').click(function(){
+			$('.isDialog').show();
+		})
+		//隐藏表单
+		$('.close,.cancel').click(function(){
+			window.history.go(-1);
+		})
+		//点击删除
+		$('.del').click(function(){
+			pno = $(this).data('pno');
+			sno = $(this).data('sno');
+			$('.isDelete').show();
+		})
+		
+		//点击修改操作
+		$('.edit').click(function(){
+
+		})
+		
+		//取消修改操作
+		$('body').on('click','.close,.cancel',function(){
+			$('.isUpdate').hide();
+		})
+	})
+  </script>
+  </body>
+</html>

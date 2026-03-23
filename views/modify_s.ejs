@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+	<link rel='stylesheet' href='/stylesheets/right_style.css' />
+  </head>
+  <body>
+    <div class="main">
+		<h3 style="color: red; font-size: 32px;">请完善个人信息<h3>
+		<form action="/information/modify_s" method="post">
+			<div class='form-group'>
+				<label>供应商号</label>
+				<input type="text" name="sno">
+			</div>
+			<div class='form-group'>
+				<label>姓名</label>
+				<input type="text" name="sname">
+			</div>
+			<div class='form-group'>
+				<label>地址</label>
+				<input type="text" name="address">
+			</div>
+			<div class='form-group'>
+				<label>电话</label>
+				<input type="text" name="phone">
+			</div>
+			<input type="text" name="userName" value="<%= userName %>" style="display: none;">
+			<input type="submit" value="修改完成">
+		</form>
+		<button class="quit_s">退出修改</button>
+	</div>
+	<script src="/javascripts/jquery.js"></script>
+	<script>
+		$(function(){
+			$('.quit_s').click(function(){
+				window.location.href = "/information/supplier?userName=<%= userName %>";
+			})
+		})
+	</script>
+  </body>
+</html>

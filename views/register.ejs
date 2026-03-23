@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>用户注册界面</title>
+	<meta charset="utf-8">
+    <link rel='stylesheet' href='/stylesheets/common.css' />
+    <link rel='stylesheet' href='/stylesheets/style_r.css' />
+  </head>
+  <body>
+	<div class="container">
+		<h3><div>用户注册界面</div></h3>
+		<div class="pic">
+			<img src="/images/fufu1_open.png" id="fufu1" width="150" height="150">
+			&nbsp&nbsp&nbsp
+			<img src="/images/fufu2_open.png" id="fufu2" width="150" height="150">
+		</div>
+		<form action="/admin/register" method="post">
+			<div class='form-group'>
+				<label>用户名</label>
+				<input type="text" id="userName" name="userName">
+			</div>
+			<div class='form-group'>
+				<label>密码</label>
+				<input type="password" id="userPwd" name="userPwd">
+			</div>
+			<div class='form-group'>
+				<label>确认密码</label>
+				<input type="password" id="repeatPwd" name="repeatPwd">
+			</div>
+			<div class='form-group'>
+				<label>身份</label>
+				<div class='radio-group'>
+					<input type="radio" name="status" value="supplier" checked>
+					<label>物料供应商</label>
+				</div>
+				<div class='radio-group'>
+					<input type="radio" name="status" value="wm">
+					<label>仓库管理员</label>
+				</div>
+			</div>
+			<input type="submit" value="注册">
+		</form>
+		<button id="userLogin">返回登录界面</button>
+	</div>
+	<script src="/javascripts/changepic.js"></script>
+	<script src="/javascripts/r2l.js"></script>
+  </body>
+</html>

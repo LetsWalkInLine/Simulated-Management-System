@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>项目信息表</title>
+	<meta charset="utf-8">
+	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+	<link rel='stylesheet' href='/stylesheets/table_style.css' />
+  </head>
+  <body>
+    <div class="container">
+		<div class="main">
+			<div class="select">
+				<form action="/like/project" method="get">
+					<select name="selectVal">
+							<option value="pid">按项目号筛选</option>
+							<option value="budget">按预算筛选(字符类型)</option>
+							<option value="year">按开工日期(年)筛选</option>
+							<option value="month">按开工日期(月)筛选</option>
+							<option value="day">按开工日期(日)筛选</option>
+					</select>
+					<div class="search">
+						<input type="text" name="like">
+						<input type="text" name="sno" value="<%= sno %>" style="display: none;" />
+						<button class="searchBtn">
+							<img src="/images/search.png" width="25px" height="25px">
+						</button>
+					</div>
+				</form>
+				<button id="addBtn">+</button>
+			</div>
+			<div class="content">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>项目号</th>
+							<th>预算(万元)</th>
+							<th>开工日期</th>
+							<th>供应商号</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% tablelist.forEach(function(item){ %>
+						<tr>
+							<td><%= item.pid %></td>
+							<td><%= item.budget %></td>
+							<td><%= item.date %></td>
+							<td><%= item.sno %></td>
+							<td>
+								<img src="/images/modify.png" class="edit" width="25px" height="25px" data-id="<%= item.pid %>" data-budget="<%= item.budget %>" data-date="<%= item.date %>">
+								<img src="/images/delete.png" class="del" width="25px" height="25px" data-id="<%= item.pid %>">
+							</td>
+						</tr>
+						<% }) %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="dialog isDialog"></div>
+	<div class="dialog-wrap isDialog">
+		<div class="dialog-header">
+			<h3>添加项目</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+		</div>
+		<form action="/addPart/project" method="post">
+			<div>
+				<p>项目号</p>
+				<p>
+					<input type="text" class="form-control" name="pid" />
+				</p>
+			</div>
+			<div>
+				<p>预算(万元)</p>
+				<p>
+					<input type="text" class="form-control" name="budget" />
+				</p>
+			</div>
+			<div>
+				<p>开工日期</p>
+				<p>
+					<input type="text" class="form-control" name="year" style="width:70px;display:inline;" />
+					<span style="margin-right: 20px;">年</span>
+					<input type="text" class="form-control" name="month" style="width:70px;display:inline;" />
+					<span style="margin-right: 20px;">月</span>
+					<input type="text" class="form-control" name="day" style="width:70px;display:inline;" />
+					<span style="margin-right: 20px;">日</span>
+				</p>
+			</div>
+			<div>
+				<p>
+					<input type="text" class="form-control" name="sno" value="<%= sno %>" style="display: none;" />
+				</p>
+			</div>			
+			<div class="dialog-submit">
+				<button class="determine">确定</button>
+			</div>
+		</form>
+		<div class="dialog-project-add">
+			<button class="cancel">取消</button>	
+		</div>
+	</div>
+	
+	<div class="dialog isDelete"></div>
+	<div class="dialog-wrap isDelete">
+		<div class="dialog-header">
+			<h3>确定是否删除?</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+			<div class="dialog-footer">
+				<button class="determine determineDel">确定</button>
+				<button class="cancel">取消</button>
+			</div>			
+		</div>
+	</div>
+
+  <script src="/javascripts/jquery.js"></script>
+  <script>
+	$(function(){
+		var id = '';
+		var updateHtml = '';
+		//显示表单
+		$('#addBtn').click(function(){
+			$('.isDialog').show();
+		})
+		//隐藏表单
+		$('.close,.cancel').click(function(){
+			$('.isDialog').hide();
+		})
+		//点击删除
+		$('.del').click(function(){
+			id = $(this).data('id');
+			$('.isDelete').show();
+		})
+		//隐藏删除
+		$('.close,.cancel').click(function(){
+			$('.isDelete').hide();
+		})
+		//点击确定删除
+		$('.determineDel').click(function(){
+			window.location.href = `/del/project?pid=${id}&sno=<%= sno %>`;
+		})
+		
+		//点击修改操作
+		$('.edit').click(function(){
+			var updateId = $(this).data('id');
+			var updateBudget = $(this).data('budget');
+			var updateDate = $(this).data('date');
+			updateHtml = `
+			<div class="dialog isUpdate"></div>
+				<div class="dialog-wrap isUpdate">
+				<div class="dialog-header">
+					<h3>修改项目</h3>
+					<div class="close">
+						<img src="/images/close.png" style="width:25px;height:25px">
+					</div>
+				</div>
+				<form action="/updatePart/project" method="post">
+					<div>
+						<p>项目号: ${updateId}</p>
+						<p>
+							<input type="text" class="form-control" name="pid" value="${updateId}" style="display: none;" />
+						</p>
+					</div>
+					<div>
+						<p>预算(万元)</p>
+						<p>
+							<input type="text" class="form-control" name="budget" value="${updateBudget}" />
+						</p>
+					</div>
+					<div>
+						<p>开工日期</p>
+						<p>
+							<input type="text" class="form-control" name="date" value="${updateDate}" />
+						</p>
+					</div>
+					<div>
+						<p>
+							<input type="text" class="form-control" name="sno" value="<%= sno %>" style="display: none;" />
+						</p>
+					</div>			
+					<div class="dialog-submit">
+						<button class="determine">确定</button>
+					</div>
+				</form>
+				<div class="dialog-project-update">
+					<button class="cancel">取消</button>	
+				</div>
+			</div>
+			`
+		 	$('body').append( updateHtml );
+		})
+		
+		//取消修改操作
+		$('body').on('click','.close,.cancel',function(){
+			$('.isUpdate').hide();
+		})
+	})
+  </script>
+  </body>
+</html>

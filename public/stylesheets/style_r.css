@@ -1,0 +1,98 @@
+.container{
+	font-size: 48px;
+	width: 100vw;
+	height: 100vh;
+	color: #fff;
+	background: url("/images/background.png") no-repeat;
+	background-size: 100% 100%;
+	overflow: hidden;
+}
+
+.pic{
+	position: absolute;
+	left: 25%;
+	top: 15%;
+	font-size: 320px;
+}
+
+header{
+	display: flex;
+	justify-content: space-between;
+	padding: 40px;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+form{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	
+	transform: translate(-50%,-50%);
+}
+
+form .form-group + .form-group{
+	margin-top: 20px;
+}
+
+form .form-group{
+	display: flex;
+	justify-content: space-between;
+}
+
+form input{
+	background-color: #7fffd4;
+	font-size: 24px;
+	width: 338px;
+	height: 40px;
+	margin-left: 20px;
+	border-radius: 12px;
+}
+
+form label{
+	color: black;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 40px;
+}
+
+form input[type="submit"]{
+	width: 100%;
+	margin-top: 32px;
+	margin-left: 0px;
+	color: #fff;
+	line-height: 40px;
+	background-color: #047bfb;
+	border-radius: 12px;
+}
+
+.form-group .radio-group{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 12px;
+	width: 150px;
+	height: 40px;
+}
+
+.radio-group label{
+	color: black;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 20px;
+}
+
+form .form-group input[type="radio"]{
+	width: 20px;
+	height: 20px;
+}
+
+button{
+	position: absolute;
+	top: 75%;
+	left: 34.8%;
+	width: 455px;
+	color: #fff;
+	line-height: 40px;
+	background-color: #047bfb;
+	border-radius: 12px;
+}

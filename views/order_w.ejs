@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>供应订单表</title>
+	<meta charset="utf-8">
+	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+	<link rel='stylesheet' href='/stylesheets/table_style.css' />
+  </head>
+  <body>
+    <div class="container">
+		<div class="main">
+			<div class="select">
+				<form action="/likeWare/order" method="get">
+					<select name="selectVal">
+							<option value="pno">按零件号筛选</option>
+							<option value="sno">按供应商号筛选</option>
+							<option value="quantity">按供应量筛选</option>
+							<option value="state">按状态筛选</option>
+					</select>
+					<div class="search">
+						<input type="text" name="like">
+						<input type="text" name="wno" value="<%= wno %>" style="display: none;" />
+						<button class="searchBtn">
+							<img src="/images/search.png" width="25px" height="25px">
+						</button>
+					</div>
+				</form>
+			</div>
+			<div class="content">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>订单号</th>
+							<th>供应商号</th>
+							<th>零件号</th>
+							<th>仓库号</th>
+							<th>供应量(万个)</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% tablelist.forEach(function(item){ %>
+						<tr>
+							<td><%= item.oid %></td>
+							<td><%= item.sno %></td>
+							<td><%= item.pno %></td>
+							<td><%= item.wno %></td>
+							<td><%= item.quantity %></td>
+							<td><%= item.state %></td>
+							<td>
+								<img src="/images/specific.png" class="specific" width="25px" height="25px" data-pno="<%= item.pno %>" data-sno="<%= item.sno %>">
+								<img src="/images/inbound.png" class="inbound" width="25px" height="25px" data-id="<%= item.oid %>" data-sno="<%= item.sno %>" data-pno="<%= item.pno %>" data-quantity="<%= item.quantity %>" data-state="<%= item.state %>">
+							</td>
+						</tr>
+						<% }) %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="dialog isDialog"></div>
+	<div class="dialog-wrap isDialog">
+		<div class="dialog-header">
+			<h3>添加仓库</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+		</div>
+		<form action="/addWare" method="post">
+			<div>
+				<p>仓库号(唯一标识，不能重复)</p>
+				<p>
+					<input type="text" class="form-control" name="wno" />
+				</p>
+			</div>
+			<div>
+				<p>面积(m^2)</p>
+				<p>
+					<input type="text" class="form-control" name="square" />
+				</p>
+			</div>
+			<div>
+				<p>联系电话</p>
+				<p>
+					<input type="text" class="form-control" name="phone" />
+				</p>
+			</div>		
+			<div class="dialog-submit">
+				<button class="determine">确定</button>
+			</div>
+		</form>
+		<div class="dialog-ware-add">
+			<button class="cancel">取消</button>	
+		</div>
+	</div>
+	
+	<div class="dialog isDelete"></div>
+	<div class="dialog-wrap isDelete">
+		<div class="dialog-header">
+			<h3>确定是否入库?</h3>
+			<div class="close">
+				<img src="/images/close.png" style="width:25px;height:25px">
+			</div>
+			<div class="dialog-footer">
+				<button class="determine determineDel">确定</button>
+				<button class="cancel">取消</button>
+			</div>			
+		</div>
+	</div>
+
+  <script src="/javascripts/jquery.js"></script>
+  <script>
+	$(function(){
+		var id = '';
+		var pno = '';
+		var sno = '';
+		var quantity = '';
+		var state = '';
+		var updateHtml = '';
+		//显示表单
+		$('#addBtn').click(function(){
+			$('.isDialog').show();
+		})
+		//隐藏表单
+		$('.close,.cancel').click(function(){
+			$('.isDialog').hide();
+		})
+		//点击删除
+		$('.inbound').click(function(){
+			id = $(this).data('id')
+			pno = $(this).data('pno');
+			sno = $(this).data('sno');
+			quantity = $(this).data('quantity');
+			state = $(this).data('state');
+			$('.isDelete').show();
+		})
+		//隐藏删除
+		$('.close,.cancel').click(function(){
+			$('.isDelete').hide();
+		})
+		//点击确定删除
+		$('.determineDel').click(function(){
+			window.location.href = `/addWare/order?oid=${id}&pno=${pno}&sno=${sno}&quantity=${quantity}&state=${state}&wno=<%= wno %>`;
+		})
+		
+		//点击修改操作
+		$('.specific').click(function(){
+			var spPno = $(this).data('pno');
+			var spSno = $(this).data('sno');
+			window.location.href = `/information/details?pno=${spPno}&sno=${spSno}`;
+		})
+		
+		//取消修改操作
+		$('body').on('click','.close,.cancel',function(){
+			$('.isUpdate').hide();
+		})
+	})
+  </script>
+  </body>
+</html>

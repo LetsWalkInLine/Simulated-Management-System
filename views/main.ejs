@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>主页面</title>
+	<meta charset="utf-8">
+	<link rel='stylesheet' href='/stylesheets/common.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <frameset cols="240px,*" border="0">
+	
+	<frame src="/left?userName=<%= userName %>&status=<%= status %>" name="left" />
+	<frame src="/right?userName=<%= userName %>" name="right" />
+	
+  </frameset>
+  <body>
+    <p>Welcome to Express</p>
+  </body>
+</html>

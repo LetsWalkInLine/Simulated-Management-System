@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="status" style="display: flex; justify-content: space-between;">
+			<input type="checkbox" id="supplier" name="supplier" value="on">
+			<input type="checkbox" id="wm" name="wm" value="on">
+			<input type="radio" name="test1" checked>
+			<input type="radio" name="test1">
+		</div>
+		<script>
+			const supplier = document.getElementById('supplier');
+			const wm = document.getElementById('wm');
+			
+			supplier.onclick = function(){
+				wm.checked = false;
+			}
+			wm.onclick = function(){
+				supplier.checked = false;
+			}
+		</script>
+	</body>
+</html>
